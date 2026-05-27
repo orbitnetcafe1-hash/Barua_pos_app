@@ -7,20 +7,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y python3-pip git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
-          pip3 install --user --upgrade buildozer
-          pip3 install --user --upgrade cython
-
       - name: Build with Buildozer
-        run: buildozer android debug
+        uses: ArtemSBulgakov/buildozer-action@v1
+        with:
+          buildozer_version: stable
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: package
           path: bin/*.apk
-
-
